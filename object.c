@@ -45,7 +45,7 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
 
     char hex[65];
     hash_to_hex(id_out, hex);
-
+// final fixes and memory handling
     mkdir(".pes", 0755);
     mkdir(".pes/objects", 0755);
 
