@@ -15,7 +15,7 @@ void hash_to_hex(const ObjectID *id, char *hex_out) {
     }
     hex_out[64] = '\0';
 }
-
+// implemented object_read
 // REQUIRED by tests
 void object_path(const ObjectID *id, char *path_out) {
     char hex[65];
