@@ -65,25 +65,31 @@ void cmd_status(void) {
 }
 
 // Usage: pes commit -m <message>
-void cmd_commit(int argc, char *argv[]) {
-    if (argc < 4 || strcmp(argv[2], "-m") != 0) {
-        fprintf(stderr, "error: commit requires a message (-m \"message\")\n");
-        return;
+// Callback for commit_walk used by cmd_log.
+int cmd_commit(int argc, char **argv) {
+    if (argc < 3 || strcmp(argv[1], "-m") != 0) {
+        printf("Usage: pes commit -m \"message\"\n");
+        return -1;
     }
 
-    const char *message = argv[3];
-    ObjectID commit_id;
-    if (commit_create(message, &commit_id) != 0) {
-        fprintf(stderr, "error: commit failed\n");
-        return;
+    const char *msg = argv[2];
+
+    ObjectID id;
+    if (commit_create(msg, &id) != 0) {
+        printf("Commit failed\n");
+        return -1;
     }
 
-    char hex[HASH_HEX_SIZE + 1];
-    hash_to_hex(&commit_id, hex);
-    printf("Committed: %.12s... %s\n", hex, message);
+    char hex[65];
+    for (int i = 0; i < 32; i++) {
+        sprintf(hex + i * 2, "%02x", id.hash[i]);
+    }
+    hex[64] = '\0';
+
+    printf("Committed as %s\n", hex);
+    return 0;
 }
 
-// Callback for commit_walk used by cmd_log.
 static void print_commit(const ObjectID *id, const Commit *commit, void *ctx) {
     (void)ctx;
     char hex[HASH_HEX_SIZE + 1];
