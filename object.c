@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-
+// directory creation logic
 #define HASH_SIZE 32
 
 // REQUIRED by tests
